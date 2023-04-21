@@ -1,18 +1,13 @@
-import responseMovies from '../mocks/results.json'
-import withoutResults from '../mocks/no-result.json'
-
-const movies = responseMovies.Search
-const hasMovies = movies?.length>0
 
 function ListOffMovies({movies}){
     return (
-        <ul>
+        <ul className='movies'>
         {
           movies.map(movie =>(
-            <li key={movie.id}>
+            <li key={movie.id} className='movie'>
               <h3>{movie.title}</h3>
               <p>{movie.year}</p>
-              <img src={movie.poster} alt={movie.Title}></img>
+              <img src={movie.poster} alt={movie.title}></img>
             </li>
           ))
           
@@ -24,11 +19,14 @@ function ListOffMovies({movies}){
 
 function NoMoviesResults(){
     return (
-        <p>No se cuentran películas para esta búsqueda</p>
+      <p>No se cuentran películas para esta búsqueda</p>
     )
 }
 
 export function Movies({mappedMovies}){
+  
+const hasMovies = mappedMovies?.length>0
+
     return (
         hasMovies
             ? <ListOffMovies movies={mappedMovies}/>
