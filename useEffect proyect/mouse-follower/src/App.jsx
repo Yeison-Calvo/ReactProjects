@@ -33,6 +33,7 @@ function App() {
       confetti()
       let newTargetX = Math.floor(Math.random()*700)
       let newTargetY = Math.floor(Math.random()*700)
+      console.log('encontrado')
       setTarget({x:newTargetX, y:newTargetY})
     }
   }, [position.x, position.y])

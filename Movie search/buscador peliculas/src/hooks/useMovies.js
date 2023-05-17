@@ -1,8 +1,8 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo, useCallback } from 'react'
 import withResults from '../mocks/results.json'
 import withoutResults from '../mocks/no-result.json'
 
-export function useMovies({query}){
+export function useMovies({query, sort}){
   const [responseMovies, setResponseMovies] = useState([])
   const previusQuery = useRef(query)
 
@@ -15,8 +15,8 @@ export function useMovies({query}){
     poster: movie.Poster
   }))
 
-
-  const getMovies = () =>{
+  // useCallback se utiliza para renderizar solamente una vez la funcion
+  const getMovies = useCallback(() =>{
     if (previusQuery.current === query) return
     if(query){
       previusQuery.current = query
@@ -30,9 +30,31 @@ export function useMovies({query}){
     }else{
       setResponseMovies(withoutResults)
     }
-  }
+  },[query])
+
+  // a pesar de que funciona, se encuentra dentro de la función, por lo que
+  // se corre el código cada vez que se renderiza, estamos renderizando
+  // cada vez que hay un cambio en el input, por lo que no nos funciona
+  // const getSortedMovies = () =>{
+  //   const sortedMovies = sort 
+  //   ? [...mappedMovies].sort((a,b) => a.title.localeCompare(b.title))
+  //   : mappedMovies
+
+  //   return sortedMovies
+  // }
+
+
+
+  const sortedMovies = useMemo(() =>{
+    return sort 
+    ? [...mappedMovies].sort((a,b) => a.title.localeCompare(b.title))
+    : mappedMovies
+  },[sort, mappedMovies])
+
+
 
   
-  return {movies: mappedMovies, getMovies}
+  
+  return {movies: sortedMovies, getMovies}
 }
   
